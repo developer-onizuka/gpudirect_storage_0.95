@@ -50,9 +50,9 @@ But it is a little complicated, the followings might be helpful for you.
 ```   
 # 4. Install MOFED5.1
 ```
- Download MLNX_OFED_LINUX-5.1-2.5.8.0-ubuntu20.04-x86_64.tgz.
+ Download MLNX_OFED_LINUX-5.3-1.0.0.1-ubuntu20.04-x86_64.tgz.
    $ sudo apt-get install python3-distutils
-   $ cd MLNX_OFED_LINUX-5.1-2.5.8.0-ubuntu20.04-x86_64/
+   $ cd MLNX_OFED_LINUX-5.3-1.0.0.1-ubuntu20.04-x86_64/
    $ sudo ./mlnxofedinstall --with-nfsrdma --with-nvmf --enable-gds --add-kernel-support
    $ sudo update-initramfs -u -k `uname -r`
    $ sudo reboot
