@@ -152,7 +152,7 @@ But it is a little complicated, the followings might be helpful for you.
    * 2            /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java   1081      manual mode
 ```
 
-# 10. Build and Run
+# 10. Througput test
 ```
 1. C-state Disable
    $ grep cstate /etc/default/grub
@@ -166,24 +166,45 @@ But it is a little complicated, the followings might be helpful for you.
    (1) mount nvme as "ordered" mode.
    # sudo mount -t ext4 -o data=ordered /dev/nvme0n1 /mnt
 
+3. Seq Write Throughput
+(1) Storage->CPU
+    1.03GB/s from NVMe to system memory.
+
+    $ gdsio -f /mnt/test1G -d 0 -n 0 -w 1 -s 1G -x 1 -I 1 -T 10
+    IoType: WRITE XferType: CPUONLY Threads: 1 DataSetSize: 10461184/1048576(KiB) IOSize: 1024(KiB) Throughput: 1.039233 GiB/sec, Avg_Latency: 939.634103 usecs ops: 10216 total_time 9.599926 secs
+    
+    
+(2) Storage->CPU->GPU
+    Bounce buffer occuring from GPU memory to NVMe and it was 1.03GB/s as you can see below:
+    
+    $ gdsio -f /mnt/test1G -d 0 -n 0 -w 1 -s 1G -x 2 -I 1 -T 10
+    IoType: WRITE XferType: CPU_GPU Threads: 1 DataSetSize: 11509760/1048576(KiB) IOSize: 1024(KiB) Throughput: 1.038694 GiB/sec, Avg_Latency: 940.127580 usecs ops: 11240 total_time 10.567659 secs
+    
+(3) Storage -> GPU (GDS)
+    GDS eliminates bounce buffer so that it can write at 1.04GB/s.
+
+    $ gdsio -f /mnt/test1G -d 0 -n 0 -w 1 -s 1G -x 0 -I 1 -T 10
+    IoType: WRITE XferType: GPUD Threads: 1 DataSetSize: 10461184/1048576(KiB) IOSize: 1024(KiB) Throughput: 1.040754 GiB/sec, Avg_Latency: 938.261355 usecs ops: 10216 total_time 9.585902 secs
+
+
 3. Seq Read Throughput
 (1) Storage->CPU
-    This value means that NVMe's seq-read throughput from NVMe to system memory is 1.36GB/s.
+    This value means that NVMe's seq-read throughput from NVMe to system memory is 1.66GB/s.
 
     $ gdsio -f /mnt/test1G -d 0 -n 0 -w 1 -s 1G -x 1 -I 0 -T 10
-    IoType: READ XferType: CPUONLY Threads: 1 DataSetSize: 14655488/1048576(KiB) IOSize: 1024(KiB) Throughput: 1.426843 GiB/sec, Avg_Latency: 684.336151 usecs ops: 14312 total_time 9.795448 secs
+    IoType: READ XferType: CPUONLY Threads: 1 DataSetSize: 17801216/1048576(KiB) IOSize: 1024(KiB) Throughput: 1.660507 GiB/sec, Avg_Latency: 588.060458 usecs ops: 17384 total_time 10.223722 secs
 
 (2) Storage->CPU->GPU
-    Bounce buffer occuring from NVMe to GPU memory and it was 1.21GB/s as you can see below:
+    Bounce buffer occuring from NVMe to GPU memory and it was 1.49GB/s as you can see below:
 
     $ gdsio -f /mnt/test1G -d 0 -n 0 -w 1 -s 1G -x 2 -I 0 -T 10
-    IoType: READ XferType: CPU_GPU Threads: 1 DataSetSize: 13606912/1048576(KiB) IOSize: 1024(KiB) Throughput: 1.279368 GiB/sec, Avg_Latency: 763.246990 usecs ops: 13288 total_time 10.142947 secs
+    IoType: READ XferType: CPU_GPU Threads: 1 DataSetSize: 15704064/1048576(KiB) IOSize: 1024(KiB) Throughput: 1.490721 GiB/sec, Avg_Latency: 655.031364 usecs ops: 15336 total_time 10.046521 secs
 
 (3) Storage -> GPU (GDS)
-    GDS eliminates bounce buffer so that it can read at 1.38GB/s.
+    GDS eliminates bounce buffer so that it can read at 1.67GB/s.
 
     $ gdsio -f /mnt/test1G -d 0 -n 0 -w 1 -s 1G -x 0 -I 0 -T 10
-    IoType: READ XferType: GPUD Threads: 1 DataSetSize: 15704064/1048576(KiB) IOSize: 1024(KiB) Throughput: 1.451929 GiB/sec, Avg_Latency: 672.534364 usecs ops: 15336 total_time 10.314939 secs
+    IoType: READ XferType: GPUD Threads: 1 DataSetSize: 17801216/1048576(KiB) IOSize: 1024(KiB) Throughput: 1.678453 GiB/sec, Avg_Latency: 581.768983 usecs ops: 17384 total_time 10.114409 secs
 
 
 ```   
