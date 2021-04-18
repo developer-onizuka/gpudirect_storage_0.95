@@ -48,7 +48,7 @@ But it is a little complicated, the followings might be helpful for you.
    $ sudo reboot
 
 ```   
-# 4. Install MOFED5.1
+# 4. Install MOFED5.3
 ```
  Download MLNX_OFED_LINUX-5.3-1.0.0.1-ubuntu20.04-x86_64.tgz.
    $ sudo apt-get install python3-distutils
