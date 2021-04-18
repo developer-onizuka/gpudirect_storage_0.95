@@ -154,13 +154,36 @@ But it is a little complicated, the followings might be helpful for you.
 
 # 10. Build and Run
 ```
-0. C-state Disable
+1. C-state Disable
    $ grep cstate /etc/default/grub
    GRUB_CMDLINE_LINUX="intel_idle.max_cstate=0 processor.max_cstate=0"
    $ sudo update-grub
+   $ sudo reboot
    $ cat /sys/devices/system/cpu/cpuidle/current_driver
    none
+   
+2. preparation about NVMe SSD
+   (1) mount nvme as "ordered" mode.
+   # sudo mount -t ext4 -o data=ordered /dev/nvme0n1 /mnt
 
+3. Seq Read Throughput
+(1) Storage->CPU
+    This value means that NVMe's seq-read throughput from NVMe to system memory is 1.36GB/s.
+
+    $ gdsio -f /mnt/test1G -d 0 -n 0 -w 1 -s 1G -x 1 -I 0 -T 10
+    IoType: READ XferType: CPUONLY Threads: 1 DataSetSize: 14655488/1048576(KiB) IOSize: 1024(KiB) Throughput: 1.426843 GiB/sec, Avg_Latency: 684.336151 usecs ops: 14312 total_time 9.795448 secs
+
+(2) Storage->CPU->GPU
+    Bounce buffer occuring from NVMe to GPU memory and it was 1.21GB/s as you can see below:
+
+    $ gdsio -f /mnt/test1G -d 0 -n 0 -w 1 -s 1G -x 2 -I 0 -T 10
+    IoType: READ XferType: CPU_GPU Threads: 1 DataSetSize: 13606912/1048576(KiB) IOSize: 1024(KiB) Throughput: 1.279368 GiB/sec, Avg_Latency: 763.246990 usecs ops: 13288 total_time 10.142947 secs
+
+(3) Storage -> GPU (GDS)
+    GDS eliminates bounce buffer so that it can read at 1.38GB/s.
+
+    $ gdsio -f /mnt/test1G -d 0 -n 0 -w 1 -s 1G -x 0 -I 0 -T 10
+    IoType: READ XferType: GPUD Threads: 1 DataSetSize: 15704064/1048576(KiB) IOSize: 1024(KiB) Throughput: 1.451929 GiB/sec, Avg_Latency: 672.534364 usecs ops: 15336 total_time 10.314939 secs
 
 
 ```   
