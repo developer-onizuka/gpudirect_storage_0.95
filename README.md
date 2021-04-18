@@ -173,7 +173,6 @@ But it is a little complicated, the followings might be helpful for you.
     $ gdsio -f /mnt/test1G -d 0 -n 0 -w 1 -s 1G -x 1 -I 1 -T 10
     IoType: WRITE XferType: CPUONLY Threads: 1 DataSetSize: 10461184/1048576(KiB) IOSize: 1024(KiB) Throughput: 1.039233 GiB/sec, Avg_Latency: 939.634103 usecs ops: 10216 total_time 9.599926 secs
     
-    
 (2) Storage->CPU->GPU
     Bounce buffer occuring from GPU memory to NVMe and it was 1.03GB/s as you can see below:
     
@@ -185,7 +184,6 @@ But it is a little complicated, the followings might be helpful for you.
 
     $ gdsio -f /mnt/test1G -d 0 -n 0 -w 1 -s 1G -x 0 -I 1 -T 10
     IoType: WRITE XferType: GPUD Threads: 1 DataSetSize: 10461184/1048576(KiB) IOSize: 1024(KiB) Throughput: 1.040754 GiB/sec, Avg_Latency: 938.261355 usecs ops: 10216 total_time 9.585902 secs
-
 
 4. Seq Read Throughput
 (1) Storage->CPU
