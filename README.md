@@ -1,5 +1,6 @@
 You can install GDS by through the release note below:
 https://docs.nvidia.com/gpudirect-storage/release-notes/index.html
+https://docs.nvidia.com/gpudirect-storage/troubleshooting-guide/index.html
 But it is a little complicated, the followings might be helpful for you.
 
 # 0. Hardware
@@ -41,6 +42,11 @@ But it is a little complicated, the followings might be helpful for you.
 ```
    $ dmesg | grep -i iommu
    See the release note above URL. You need reboot after making disable iommu.
+   $ cat /etc/default/grub |grep iommu
+   GRUB_CMDLINE_LINUX_DEFAULT="quiet splash intel_iommu=off"
+   $ sudo update-grub
+   $ sudo reboot
+
 ```   
 # 4. Install MOFED5.1
 ```
