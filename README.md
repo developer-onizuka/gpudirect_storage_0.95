@@ -187,7 +187,7 @@ But it is a little complicated, the followings might be helpful for you.
     IoType: WRITE XferType: GPUD Threads: 1 DataSetSize: 10461184/1048576(KiB) IOSize: 1024(KiB) Throughput: 1.040754 GiB/sec, Avg_Latency: 938.261355 usecs ops: 10216 total_time 9.585902 secs
 
 
-3. Seq Read Throughput
+4. Seq Read Throughput
 (1) Storage->CPU
     This value means that NVMe's seq-read throughput from NVMe to system memory is 1.66GB/s.
 
@@ -206,5 +206,35 @@ But it is a little complicated, the followings might be helpful for you.
     $ gdsio -f /mnt/test1G -d 0 -n 0 -w 1 -s 1G -x 0 -I 0 -T 10
     IoType: READ XferType: GPUD Threads: 1 DataSetSize: 17801216/1048576(KiB) IOSize: 1024(KiB) Throughput: 1.678453 GiB/sec, Avg_Latency: 581.768983 usecs ops: 17384 total_time 10.114409 secs
 
+5. Rand Write Throughput
+(1) Storage->CPU
+    $ gdsio -f /mnt/test1G -d 0 -n 0 -w 1 -s 1G -x 1 -I 3 -T 10
+    IoType: RANDWRITE XferType: CPUONLY Threads: 1 DataSetSize: 10461184/1048576(KiB) IOSize: 1024(KiB) Throughput: 0.940263 GiB/sec, Avg_Latency: 1038.538175 usecs ops: 10216 total_time 10.610397 secs
 
+(2) Storage->CPU->GPU
+    $ gdsio -f /mnt/test1G -d 0 -n 0 -w 1 -s 1G -x 2 -I 3 -T 10
+    IoType: RANDWRITE XferType: CPU_GPU Threads: 1 DataSetSize: 9412608/1048576(KiB) IOSize: 1024(KiB) Throughput: 0.924835 GiB/sec, Avg_Latency: 1055.857920 usecs ops: 9192 total_time 9.706119 secs
+
+(3) Storage -> GPU (GDS)
+    $ gdsio -f /mnt/test1G -d 0 -n 0 -w 1 -s 1G -x 0 -I 3 -T 10
+    IoType: RANDWRITE XferType: GPUD Threads: 1 DataSetSize: 9412608/1048576(KiB) IOSize: 1024(KiB) Throughput: 0.931682 GiB/sec, Avg_Latency: 1048.084639 usecs ops: 9192 total_time 9.634797 secs
+
+6. Rand Read Throughput
+(1) Storage->CPU
+    $ gdsio -f /mnt/test1G -d 0 -n 0 -w 1 -s 1G -x 1 -I 2 -T 10
+    IoType: RANDREAD XferType: CPUONLY Threads: 1 DataSetSize: 12558336/1048576(KiB) IOSize: 1024(KiB) Throughput: 1.132377 GiB/sec, Avg_Latency: 862.325750 usecs ops: 12264 total_time 10.576477 secs
+        
+(2) Storage->CPU->GPU
+    $ gdsio -f /mnt/test1G -d 0 -n 0 -w 1 -s 1G -x 2 -I 2 -T 10
+    IoType: RANDREAD XferType: CPU_GPU Threads: 1 DataSetSize: 10461184/1048576(KiB) IOSize: 1024(KiB) Throughput: 1.022459 GiB/sec, Avg_Latency: 955.010278 usecs ops: 10216 total_time 9.757416 secs
+    
+(3) Storage -> GPU (GDS)
+    $ gdsio -f /mnt/test1G -d 0 -n 0 -w 1 -s 1G -x 0 -I 2 -T 10
+    IoType: RANDREAD XferType: GPUD Threads: 1 DataSetSize: 12558336/1048576(KiB) IOSize: 1024(KiB) Throughput: 1.146988 GiB/sec, Avg_Latency: 851.332436 usecs ops: 12264 total_time 10.441746 secs
+    
+
+
+    
+    
+    
 ```   
