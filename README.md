@@ -1,6 +1,8 @@
 You can install GDS by through the release note below:
+```
 https://docs.nvidia.com/gpudirect-storage/release-notes/index.html
 https://docs.nvidia.com/gpudirect-storage/troubleshooting-guide/index.html
+```
 But it is a little complicated, the followings might be helpful for you.
 
 # 0. Hardware
