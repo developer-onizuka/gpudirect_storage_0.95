@@ -35,6 +35,9 @@ But it is a little complicated, the followings might be helpful for you.
 # 1. Install Ubuntu 
 ```
    Install Ubuntu 20.04 as "Minimal Install" and don't select "install third-party software for graphics and Wi-Fi hardware and additional media formats".
+   See also followings:
+   https://qiita.com/RyodoTanaka/items/e9b15d579d17651650b7
+   https://thr3a.hatenablog.com/entry/20170805/1501943406
 ```
 # 2. Check if the kernel version
 ```
